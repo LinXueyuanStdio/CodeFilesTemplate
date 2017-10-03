@@ -1,5 +1,8 @@
 # CodeFileStructTemplate代码文件组织结构模板
 
+1. clone to local
+2. fuck it
+
 For laziness, run the comment below:
 ```shell
 echo "alias newtemp='git clone git@github.com:LinXueyuanStdio/CodeFilesTemplate.git'" > ~/.bashrc
@@ -32,8 +35,7 @@ python main.py help
 
 1. 必须首先启动visdom：`$ python -m visdom.server`
 2. 然后使用如下命令启动训练：在gpu0上训练,并把可视化结果保存在`visdom` 的`classifier env`上
-
-  `$ python main.py train --data-root=./data/train --use-gpu=True --env=classifier`
+    `$ python main.py train --data-root=./data/train --use-gpu=True --env=classifier`
 
 ## 测试
 ```shell
@@ -74,7 +76,7 @@ python main.py --data-root=./data/test --use-gpu=False --batch-size=256
 | README.md | 提供程序的必要说明 |
 
 
-# __init__.py
+# `__init__.py`
 
 可以看到，几乎每个文件夹下都有`__init__.py`，一个目录如果包含了`__init__.py`文件，那么它就变成了一个包（package）。
 
@@ -84,11 +86,11 @@ python main.py --data-root=./data/test --use-gpu=False --batch-size=256
 ```python
 from data.dataset import DogCat
 ```
-而如果在data/__init__.py中写入
+而如果在`data/__init__.py`中写入
 ```python
 from .dataset import DogCat
 ```
-则在main.py中就可以直接写为：
+则在`main.py`中就可以直接写为：
 ```python
 from data import DogCat
 ```

@@ -15,7 +15,7 @@ class DogCat(data.Dataset):
         self.test = test
         imgs = [os.path.join(root,img) for img in os.listdir(root)] 
 
-        # test1: data/test1/8973.jpg
+        # test: data/test/8973.jpg
         # train: data/train/cat.10004.jpg 
         if self.test:
             imgs = sorted(imgs,key=lambda x:int(x.split('.')[-2].split('/')[-1]))
