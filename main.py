@@ -10,16 +10,19 @@ from torchnet import meter
 from utils.visualize import Visualizer
 
 def test(**kwargs):
+    '''
+    测试（inference）
+    '''
     opt.parse(kwargs)
     import ipdb;
     ipdb.set_trace()
-    # configure model
+    # configure model 模型
     model = getattr(models, opt.model)().eval()
     if opt.load_model_path:
         model.load(opt.load_model_path)
     if opt.use_gpu: model.cuda()
 
-    # data
+    # data 数据
     train_data = DogCat(opt.test_data_root,test=True)
     test_dataloader = DataLoader(train_data,batch_size=opt.batch_size,shuffle=False,num_workers=opt.num_workers)
     results = []
@@ -45,16 +48,20 @@ def write_csv(results,file_name):
         writer.writerows(results)
     
 def train(**kwargs):
+    '''
+    训练
+    '''
+    # 根据命令行参数更新配置
     opt.parse(kwargs)
     vis = Visualizer(opt.env)
 
-    # step1: configure model
+    # step1: configure model定义网络
     model = getattr(models, opt.model)()
     if opt.load_model_path:
         model.load(opt.load_model_path)
     if opt.use_gpu: model.cuda()
 
-    # step2: data
+    # step2: data定义数据
     train_data = DogCat(opt.train_data_root,train=True)
     val_data = DogCat(opt.train_data_root,train=False)
     train_dataloader = DataLoader(train_data,opt.batch_size,
@@ -62,17 +69,17 @@ def train(**kwargs):
     val_dataloader = DataLoader(val_data,opt.batch_size,
                         shuffle=False,num_workers=opt.num_workers)
     
-    # step3: criterion and optimizer
+    # step3: criterion and optimizer定义损失函数和优化器
     criterion = t.nn.CrossEntropyLoss()
     lr = opt.lr
     optimizer = t.optim.Adam(model.parameters(),lr = lr,weight_decay = opt.weight_decay)
         
-    # step4: meters
+    # step4: meters统计指标：平滑处理之后的损失，还有混淆矩阵
     loss_meter = meter.AverageValueMeter()
     confusion_matrix = meter.ConfusionMeter(2)
     previous_loss = 1e100
 
-    # train
+    # step5:train开始训练
     for epoch in range(opt.max_epoch):
         
         loss_meter.reset()
@@ -80,7 +87,7 @@ def train(**kwargs):
 
         for ii,(data,label) in enumerate(train_dataloader):
 
-            # train model 
+            # train model 训练网络
             input = Variable(data)
             target = Variable(label)
             if opt.use_gpu:
@@ -94,14 +101,14 @@ def train(**kwargs):
             optimizer.step()
             
             
-            # meters update and visualize
+            # meters update and visualize可视化各种指标
             loss_meter.add(loss.data[0])
             confusion_matrix.add(score.data, target.data)
 
-            if ii%opt.print_freq==opt.print_freq-1:
+            if ii%opt.print_freq==opt.print_freq-1: # 计算在验证集上的指标
                 vis.plot('loss', loss_meter.value()[0])
                 
-                # 进入debug模式
+                # 如果需要的话，进入debug模式
                 if os.path.exists(opt.debug_file):
                     import ipdb;
                     ipdb.set_trace()
@@ -109,14 +116,14 @@ def train(**kwargs):
 
         model.save()
 
-        # validate and visualize
+        # validate and visualize计算验证集上的指标及可视化
         val_cm,val_accuracy = val(model,val_dataloader)
 
         vis.plot('val_accuracy',val_accuracy)
         vis.log("epoch:{epoch},lr:{lr},loss:{loss},train_cm:{train_cm},val_cm:{val_cm}".format(
                     epoch = epoch,loss = loss_meter.value()[0],val_cm = str(val_cm.value()),train_cm=str(confusion_matrix.value()),lr=lr))
         
-        # update learning rate
+        # update learning rate如果损失不再下降，则降低学习率
         if loss_meter.value()[0] > previous_loss:          
             lr = lr * opt.lr_decay
             # 第二种降低学习率的方法:不会有moment等信息的丢失
@@ -130,6 +137,7 @@ def val(model,dataloader):
     '''
     计算模型在验证集上的准确率等信息
     '''
+    # 把模型设为验证模式
     model.eval()
     confusion_matrix = meter.ConfusionMeter(2)
     for ii, data in enumerate(dataloader):
@@ -141,7 +149,7 @@ def val(model,dataloader):
             val_label = val_label.cuda()
         score = model(val_input)
         confusion_matrix.add(score.data.squeeze(), label.type(t.LongTensor))
-
+    # 把模型恢复为训练模式
     model.train()
     cm_value = confusion_matrix.value()
     accuracy = 100. * (cm_value[0][0] + cm_value[1][1]) / (cm_value.sum())

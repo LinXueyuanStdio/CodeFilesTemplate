@@ -6,6 +6,8 @@ class AlexNet(BasicModule):
     '''
     code from torchvision/models/alexnet.py
     结构参考 <https://arxiv.org/abs/1404.5997>
+    每个模型都必须有以下函数
+    __init__(),train()
     '''
     def __init__(self, num_classes=2):
         
@@ -43,3 +45,15 @@ class AlexNet(BasicModule):
         x = x.view(x.size(0), 256 * 6 * 6)
         x = self.classifier(x)
         return x
+        
+        
+        
+    def train(self):
+         # 训练模型
+         for epoch in range(opt.max_epoch)
+           for ii,data in enumerate(self.dataloader):
+               self.train_step(data)
+           model.save()
+   
+     def train_step(self):
+         pass

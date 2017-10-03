@@ -4,10 +4,12 @@ class DefaultConfig(object):
     env = 'default' # visdom 环境
     model = 'AlexNet' # 使用的模型，名字必须与models/__init__.py中的名字一致
     
+    # 数据集参数（文件路径、batch_size等）
     train_data_root = './data/train/' # 训练集存放路径
     test_data_root = './data/test/' # 测试集存放路径
     load_model_path = 'checkpoints/model.pth' # 加载预训练的模型的路径，为None代表不加载
-
+    
+    # 训练参数（学习率、训练epoch等）
     batch_size = 128 # batch size
     use_gpu = True # user GPU or not
     num_workers = 4 # how many workers for loading data
@@ -15,7 +17,8 @@ class DefaultConfig(object):
 
     debug_file = '/tmp/debug' # if os.path.exists(debug_file): enter ipdb
     result_file = 'result.csv'
-
+    
+    # 模型参数
     max_epoch = 10
     lr = 0.1 # initial learning rate学习率
     lr_decay = 0.95 # when val_loss increase, lr = lr*lr_decay

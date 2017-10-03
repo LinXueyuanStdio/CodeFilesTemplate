@@ -11,9 +11,11 @@ Remember to `rename directory name` or `copy to another directory`.
 
 # usage
 
-## 数据下载
+## 数据获取
 
 下载所需的数据，解压并把训练集和测试集分别放在data文件夹中
+
+或在`data/`目录下运行`./get_data.sh`
 
 ## 安装
 
@@ -21,18 +23,17 @@ Remember to `rename directory name` or `copy to another directory`.
 | --- | --- |
 | 安装指定依赖 | `pip install -r requirements.txt` |
 
-## 训练
-
-1. 必须首先启动visdom：
-`$ python -m visdom.server`
-2. 然后使用如下命令启动训练：
-  在gpu0上训练,并把可视化结果保存在`visdom` 的`classifier env`上
-`$ python main.py train --data-root=./data/train --use-gpu=True --env=classifier`
-
-详细的使用命令 可使用
+## 打印帮助信息
 ```shell
 python main.py help
 ```
+
+## 训练
+
+1. 必须首先启动visdom：`$ python -m visdom.server`
+2. 然后使用如下命令启动训练：在gpu0上训练,并把可视化结果保存在`visdom` 的`classifier env`上
+
+  `$ python main.py train --data-root=./data/train --use-gpu=True --env=classifier`
 
 ## 测试
 ```shell
