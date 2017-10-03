@@ -9,6 +9,36 @@ Then you can just run `newtemp` to create a great file structure.
 
 Remember to `rename directory name` or `copy to another directory`.
 
+# usage
+
+## 数据下载
+
+下载所需的数据，解压并把训练集和测试集分别放在data文件夹中
+
+## 安装
+
+| 安装PyTorch | 可按照[PyTorch官网](http://pytorch.org/)的指南，根据自己的平台安装指定的版本 |
+| --- | --- |
+| 安装指定依赖 | `pip install -r requirements.txt` |
+
+## 训练
+
+1. 必须首先启动visdom：
+`$ python -m visdom.server`
+2. 然后使用如下命令启动训练：
+  在gpu0上训练,并把可视化结果保存在`visdom` 的`classifier env`上
+`$ python main.py train --data-root=./data/train --use-gpu=True --env=classifier`
+
+详细的使用命令 可使用
+```shell
+python main.py help
+```
+
+## 测试
+```shell
+python main.py --data-root=./data/test --use-gpu=False --batch-size=256
+```
+------
 # tree
 ```shell
 .
