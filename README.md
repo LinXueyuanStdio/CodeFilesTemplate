@@ -45,11 +45,11 @@ Remember to `rename directory name` or `copy to another directory`.
 
 # __init__.py
 
-可以看到，几乎每个文件夹下都有__init__.py，一个目录如果包含了__init__.py 文件，那么它就变成了一个包（package）。
+可以看到，几乎每个文件夹下都有`__init__.py`，一个目录如果包含了`__init__.py`文件，那么它就变成了一个包（package）。
 
-__init__.py可以为空，也可以定义包的属性和方法，但其必须存在，其它程序才能从这个目录中导入相应的模块或函数。
+`__init__.py`可以为空，也可以定义包的属性和方法，但其必须存在，其它程序才能从这个目录中导入相应的模块或函数。
 
-例如在data/文件夹下有__init__.py，则在main.py 中就可以
+例如在`data/`文件夹下有`__init__.py`，则在`main.py`中就可以
 ```python
 from data.dataset import DogCat
 ```
@@ -63,9 +63,9 @@ from data import DogCat
 ```
 或者
 ```python
-import data;
+import data
 dataset = data.DogCat
 ```
-相比于from data.dataset import DogCat更加便捷。
+相比于`from data.dataset import DogCat`更加便捷。
 
 
