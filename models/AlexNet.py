@@ -50,10 +50,11 @@ class AlexNet(BasicModule):
         
     def train(self):
          # 训练模型
-         for epoch in range(opt.max_epoch)
+         for epoch in range(opt.max_epoch):
            for ii,data in enumerate(self.dataloader):
                self.train_step(data)
            model.save()
    
-     def train_step(self):
-         pass
+     #def train_step(self):
+     
+         #pass
